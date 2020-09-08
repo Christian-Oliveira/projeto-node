@@ -10,7 +10,9 @@ const usersRouter = Router();
 usersRouter.get('/', async (request, response) => {
     const usersRepository = getRepository(User);
     const users = await usersRepository.find();
-
+    for (var i in users) {
+        delete users[i].password;
+    }
     return response.json(users);
 });
 
@@ -23,6 +25,8 @@ usersRouter.post('/', async (request, response) => {
         const user = await createUser.execute({
             name, email, password,
         });
+
+        delete user.password;
 
         return response.json(user);
     } catch (e) {
